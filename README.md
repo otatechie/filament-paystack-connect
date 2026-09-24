@@ -110,6 +110,21 @@ FilamentPaystackConnectPlugin::make()
 them. They're saved with `Business::create()`, so make them fillable. Leave it
 out if sellers sign up through your app: Add seller then picks one of them.
 
+## Icons
+
+The sidebar icons are Heroicons. A theme or your app can swap them with
+Filament's icon aliases:
+
+```php
+use Filament\Support\Facades\FilamentIcon;
+use Otatechie\FilamentPaystackConnect\View\PaystackConnectIconAlias;
+
+FilamentIcon::register([
+    PaystackConnectIconAlias::PAYMENTS_NAVIGATION_ITEM => 'lucide-banknote',
+    PaystackConnectIconAlias::SELLERS_NAVIGATION_ITEM => 'lucide-store',
+]);
+```
+
 ## Who can see it
 
 Everyone who can use your panel can see these pages and act on them,

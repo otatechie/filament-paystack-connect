@@ -3,6 +3,7 @@
 namespace Otatechie\FilamentPaystackConnect\Actions;
 
 use Filament\Actions\Action;
+use Filament\Support\Enums\Width;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Database\Eloquent\Model;
 use Otatechie\FilamentPaystackConnect\FilamentPaystackConnectPlugin;
@@ -23,6 +24,7 @@ class ConnectPaystackAccountAction
     public static function make(): Action
     {
         return Action::make('connectPaystack')
+            ->modalWidth(Width::Large)
             ->label(fn (Model $record): string => static::subaccount($record) ? 'Edit payout account' : 'Set up payouts')
             ->icon(Heroicon::OutlinedBuildingLibrary)
             ->authorize(fn (Model $record): bool => ($subaccount = static::subaccount($record))

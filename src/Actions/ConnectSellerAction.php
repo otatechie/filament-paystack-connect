@@ -9,6 +9,7 @@ use Filament\Notifications\Notification;
 use Filament\Schemas\Components\Component;
 use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Utilities\Get;
+use Filament\Support\Enums\Width;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -108,6 +109,7 @@ class ConnectSellerAction
     protected static function base(string $name): Action
     {
         return Action::make($name)
+            ->modalWidth(Width::Large)
             ->visible(fn (): bool => static::plugin()->getSellerModel() !== null)
             ->modalDescription(self::DESCRIPTION);
     }

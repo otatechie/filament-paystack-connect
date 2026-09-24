@@ -5,6 +5,7 @@ namespace Otatechie\FilamentPaystackConnect\Actions;
 use Filament\Actions\Action;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
+use Filament\Support\Enums\Width;
 use Filament\Support\Icons\Heroicon;
 use InvalidArgumentException;
 use Otatechie\FilamentPaystackConnect\FilamentPaystackConnectPlugin;
@@ -19,6 +20,7 @@ class RefundPaymentAction
     public static function make(): Action
     {
         return Action::make('refund')
+            ->modalWidth(Width::Medium)
             ->label('Refund')
             ->icon(Heroicon::OutlinedReceiptRefund)
             ->color('danger')

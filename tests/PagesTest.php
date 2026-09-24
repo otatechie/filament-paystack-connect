@@ -1,8 +1,16 @@
 <?php
 
+use Filament\Support\Enums\Width;
+use Filament\Support\Facades\FilamentIcon;
+use Filament\Support\Icons\Heroicon;
+use Otatechie\FilamentPaystackConnect\Actions\ConnectPaystackAccountAction;
+use Otatechie\FilamentPaystackConnect\Actions\ConnectSellerAction;
+use Otatechie\FilamentPaystackConnect\Actions\LinkSubaccountAction;
+use Otatechie\FilamentPaystackConnect\Actions\RefundPaymentAction;
 use Otatechie\FilamentPaystackConnect\Resources\Payments\PaymentResource;
 use Otatechie\FilamentPaystackConnect\Resources\Sellers\SellerResource;
 use Otatechie\FilamentPaystackConnect\Tests\Fixtures\Business;
+use Otatechie\FilamentPaystackConnect\View\PaystackConnectIconAlias;
 use Otatechie\PaystackConnect\Facades\PaystackConnect;
 use Otatechie\PaystackConnect\Support\SettlementAccount;
 
@@ -18,4 +26,25 @@ it('renders every page in the panel, under the Paystack group', function () {
     $this->get(SellerResource::getUrl('view', ['record' => $subaccount]))->assertOk()->assertSee('•••• 4567');
 
     expect(PaymentResource::getUrl('index'))->toEndWith('/admin/paystack/payments');
+});
+
+it('uses Heroicons in the sidebar unless a theme registers its own', function () {
+    expect(PaymentResource::getNavigationIcon())->toBe(Heroicon::OutlinedBanknotes)
+        ->and(SellerResource::getNavigationIcon())->toBe(Heroicon::OutlinedBuildingStorefront);
+
+    FilamentIcon::register([
+        PaystackConnectIconAlias::PAYMENTS_NAVIGATION_ITEM => 'lucide-banknote',
+        PaystackConnectIconAlias::SELLERS_NAVIGATION_ITEM => 'lucide-store',
+    ]);
+
+    expect(PaymentResource::getNavigationIcon())->toBe('lucide-banknote')
+        ->and(SellerResource::getNavigationIcon())->toBe('lucide-store');
+});
+
+it('sizes each modal to its form instead of Filament\'s 4xl default', function () {
+    expect(ConnectSellerAction::make()->getModalWidth())->toBe(Width::Large)
+        ->and(ConnectSellerAction::forRecord()->getModalWidth())->toBe(Width::Large)
+        ->and(ConnectPaystackAccountAction::make()->getModalWidth())->toBe(Width::Large)
+        ->and(RefundPaymentAction::make()->getModalWidth())->toBe(Width::Medium)
+        ->and(LinkSubaccountAction::make()->getModalWidth())->toBe(Width::Medium);
 });

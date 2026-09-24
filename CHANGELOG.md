@@ -14,4 +14,6 @@ First release: a Filament 5 panel for
 - Sellers: a table with masked accounts and holders, an **Add seller** action that sets where the seller is paid, using Paystack's live bank and mobile money list, **Edit** (the same form, filled in), and **Link to seller** for imported subaccounts.
 - **Add seller** creates the seller and their payout account in one form, with the fields you give `sellerForm()`, and keeps neither if Paystack refuses the account.
 - **Set up payouts**: an action for your own seller pages, which sets where that seller is paid, or changes it once set up.
+- Modals are sized to their forms: Add seller and Edit 512px (`lg`), Refund and Link to seller 448px (`md`).
+- Sidebar icons can be swapped with Filament icon aliases (`PaystackConnectIconAlias`).
 - Actions respect the app's policies when defined: `refund` and `verify` on payments, `create` and `update` on subaccounts.

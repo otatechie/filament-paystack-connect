@@ -5,14 +5,17 @@ namespace Otatechie\FilamentPaystackConnect\Resources\Sellers;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
+use Filament\Support\Facades\FilamentIcon;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Model;
 use Otatechie\FilamentPaystackConnect\FilamentPaystackConnectPlugin;
 use Otatechie\FilamentPaystackConnect\Resources\Sellers\Pages\ListSellers;
 use Otatechie\FilamentPaystackConnect\Resources\Sellers\Pages\ViewSeller;
 use Otatechie\FilamentPaystackConnect\Resources\Sellers\Schemas\SellerInfolist;
 use Otatechie\FilamentPaystackConnect\Resources\Sellers\Tables\SellersTable;
+use Otatechie\FilamentPaystackConnect\View\PaystackConnectIconAlias;
 use Otatechie\PaystackConnect\Models\Subaccount;
 use UnitEnum;
 
@@ -27,9 +30,14 @@ class SellerResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'business_name';
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBuildingStorefront;
-
     protected static ?int $navigationSort = 2;
+
+    public static function getNavigationIcon(): string|BackedEnum|Htmlable|null
+    {
+        return static::$navigationIcon
+            ?? FilamentIcon::resolve(PaystackConnectIconAlias::SELLERS_NAVIGATION_ITEM)
+            ?? Heroicon::OutlinedBuildingStorefront;
+    }
 
     public static function getNavigationGroup(): string|UnitEnum|null
     {

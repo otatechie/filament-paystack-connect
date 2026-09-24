@@ -5,6 +5,7 @@ namespace Otatechie\FilamentPaystackConnect\Actions;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Select;
 use Filament\Notifications\Notification;
+use Filament\Support\Enums\Width;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Database\Eloquent\Model;
 use Otatechie\FilamentPaystackConnect\FilamentPaystackConnectPlugin;
@@ -18,6 +19,7 @@ class LinkSubaccountAction
     public static function make(): Action
     {
         return Action::make('link')
+            ->modalWidth(Width::Medium)
             ->label('Link to seller')
             ->icon(Heroicon::OutlinedLink)
             ->authorize(fn (Subaccount $record): bool => FilamentPaystackConnectPlugin::allows('update', $record))
