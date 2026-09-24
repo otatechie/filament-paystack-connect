@@ -25,7 +25,7 @@ class SellersTable
                     ->searchable()
                     ->description(fn (Subaccount $record): ?string => static::ownerLabel($record)),
                 TextColumn::make('account')
-                    ->label('Account')
+                    ->label('Paid to')
                     ->state(fn (Subaccount $record): string => trim(($record->bank_name ?? $record->settlement_bank ?? '').' '.$record->maskedAccountNumber())),
                 TextColumn::make('account_name')
                     ->label('Holder')

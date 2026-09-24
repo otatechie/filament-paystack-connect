@@ -24,7 +24,7 @@ class VerifyPaymentAction
                 try {
                     $payment = PaystackConnect::verify($record->reference);
                 } catch (PaystackException $e) {
-                    Notification::make()->title('Paystack could not verify this payment')->body($e->getMessage())->danger()->send();
+                    Notification::make()->title('Paystack could not verify this payment')->body(FilamentPaystackConnectPlugin::errorMessage($e))->danger()->send();
 
                     return;
                 }

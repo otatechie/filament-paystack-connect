@@ -2,9 +2,11 @@
 
 namespace Otatechie\FilamentPaystackConnect\Tests\Fixtures;
 
+use Filament\Forms\Components\TextInput;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Otatechie\FilamentPaystackConnect\FilamentPaystackConnectPlugin;
+use Otatechie\FilamentPaystackConnect\Tests\Fixtures\Resources\BusinessResource;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -14,6 +16,11 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
-            ->plugin(FilamentPaystackConnectPlugin::make()->sellerModel(Business::class, 'name'));
+            ->resources([BusinessResource::class])
+            ->plugin(
+                FilamentPaystackConnectPlugin::make()
+                    ->sellerModel(Business::class, 'name')
+                    ->sellerForm(fn () => [TextInput::make('name')->required()]),
+            );
     }
 }

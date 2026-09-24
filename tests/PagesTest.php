@@ -14,7 +14,7 @@ it('renders every page in the panel, under the Paystack group', function () {
 
     $this->get(PaymentResource::getUrl('index'))->assertOk()->assertSee('Paystack')->assertSee('Payments')->assertSee('Sellers');
     $this->get(PaymentResource::getUrl('view', ['record' => $payment]))->assertOk()->assertSee($payment->reference);
-    $this->get(SellerResource::getUrl('index'))->assertOk()->assertSee('Connect seller');
+    $this->get(SellerResource::getUrl('index'))->assertOk()->assertSee('Add seller');
     $this->get(SellerResource::getUrl('view', ['record' => $subaccount]))->assertOk()->assertSee('•••• 4567');
 
     expect(PaymentResource::getUrl('index'))->toEndWith('/admin/paystack/payments');

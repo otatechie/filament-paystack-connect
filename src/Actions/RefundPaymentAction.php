@@ -38,7 +38,7 @@ class RefundPaymentAction
 
                     PaystackConnect::refund($record, $amount);
                 } catch (PaystackException|InvalidArgumentException $e) {
-                    Notification::make()->title('The refund was not requested')->body($e->getMessage())->danger()->send();
+                    Notification::make()->title('The refund was not requested')->body(FilamentPaystackConnectPlugin::errorMessage($e))->danger()->send();
 
                     return;
                 }

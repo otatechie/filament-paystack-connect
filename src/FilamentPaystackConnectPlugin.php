@@ -2,13 +2,17 @@
 
 namespace Otatechie\FilamentPaystackConnect;
 
+use Closure;
 use Filament\Contracts\Plugin;
 use Filament\Panel;
+use Filament\Schemas\Components\Component;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Gate;
 use InvalidArgumentException;
 use Otatechie\FilamentPaystackConnect\Resources\Payments\PaymentResource;
 use Otatechie\FilamentPaystackConnect\Resources\Sellers\SellerResource;
+use Otatechie\PaystackConnect\Exceptions\PaystackException;
+use Throwable;
 
 /**
  * Adds Paystack payments and sellers to a Filament panel:
@@ -23,6 +27,8 @@ class FilamentPaystackConnectPlugin implements Plugin
     protected ?string $sellerModel = null;
 
     protected string $sellerTitleAttribute = 'name';
+
+    protected ?Closure $sellerForm = null;
 
     protected ?string $navigationGroup = 'Paystack';
 
@@ -43,8 +49,8 @@ class FilamentPaystackConnectPlugin implements Plugin
     }
 
     /**
-     * The model that gets paid, such as a business or vendor. Enables connecting
-     * sellers from the panel; $titleAttribute is shown to pick one.
+     * The model that gets paid, such as a business or vendor. Enables adding
+     * sellers' payout accounts from the panel; $titleAttribute is shown to pick one.
      *
      * @param  class-string<Model>  $model
      */
@@ -69,6 +75,28 @@ class FilamentPaystackConnectPlugin implements Plugin
     public function getSellerTitleAttribute(): string
     {
         return $this->sellerTitleAttribute;
+    }
+
+    /**
+     * Fields for a new seller. With them, Add seller creates the seller and
+     * their payout account in one form; without, it picks an existing seller.
+     *
+     *     ->sellerForm(fn () => [TextInput::make('name')->label('Business name')->required()])
+     *
+     * The fields are saved with $model::create(), so make them fillable.
+     *
+     * @param  Closure(): array<int, Component>|null  $schema
+     */
+    public function sellerForm(?Closure $schema): static
+    {
+        $this->sellerForm = $schema;
+
+        return $this;
+    }
+
+    public function getSellerForm(): ?Closure
+    {
+        return $this->sellerForm;
     }
 
     /** Null puts the pages at the top level of the navigation. */
@@ -99,6 +127,14 @@ class FilamentPaystackConnectPlugin implements Plugin
         }
 
         return Gate::allows($ability, $model);
+    }
+
+    /** Paystack's own sentence for a refused request, without the method, path and status code. */
+    public static function errorMessage(Throwable $e): string
+    {
+        $message = $e instanceof PaystackException ? ($e->body['message'] ?? null) : null;
+
+        return is_string($message) && $message !== '' ? $message : $e->getMessage();
     }
 
     public function register(Panel $panel): void

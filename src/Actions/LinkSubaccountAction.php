@@ -26,17 +26,8 @@ class LinkSubaccountAction
                 Select::make('seller')
                     ->required()
                     ->searchable()
-                    ->getSearchResultsUsing(function (string $search): array {
-                        $plugin = FilamentPaystackConnectPlugin::get();
-                        /** @var class-string<Model> $model */
-                        $model = $plugin->getSellerModel();
-
-                        return $model::query()
-                            ->where($plugin->getSellerTitleAttribute(), 'like', "%{$search}%")
-                            ->limit(50)
-                            ->pluck($plugin->getSellerTitleAttribute(), (new $model)->getKeyName())
-                            ->all();
-                    })
+                    ->options(fn (): array => ConnectSellerAction::sellerOptions())
+                    ->getSearchResultsUsing(fn (string $search): array => ConnectSellerAction::sellerOptions($search))
                     ->getOptionLabelUsing(function ($value): ?string {
                         $plugin = FilamentPaystackConnectPlugin::get();
                         /** @var class-string<Model> $model */
@@ -52,7 +43,7 @@ class LinkSubaccountAction
                 try {
                     PaystackConnect::subaccounts()->attach($model::query()->findOrFail($data['seller']), $record->subaccount_code);
                 } catch (PaystackException $e) {
-                    Notification::make()->title('Paystack refused the change')->body($e->getMessage())->danger()->send();
+                    Notification::make()->title('Paystack refused the change')->body(FilamentPaystackConnectPlugin::errorMessage($e))->danger()->send();
                     $action->halt();
 
                     return;
