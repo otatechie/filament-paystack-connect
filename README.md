@@ -10,7 +10,7 @@ payment went to, your fee on it, and refunds the package is still holding.
 
 ## Requirements
 
-- PHP 8.3+, Laravel 12 or 13, Filament 5
+- PHP 8.3+, Laravel 12 or 13, Filament 5.8.3 or later
 - [otatechie/laravel-paystack-connect](https://github.com/otatechie/laravel-paystack-connect)
   1.2 or later, installed and set up (keys, migration and webhook)
 
