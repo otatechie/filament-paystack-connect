@@ -21,6 +21,7 @@ class LinkSubaccountAction
         return Action::make('link')
             ->modalWidth(Width::Medium)
             ->label('Link to seller')
+            ->modalSubmitActionLabel('Link')
             ->icon(Heroicon::OutlinedLink)
             ->authorize(fn (Subaccount $record): bool => FilamentPaystackConnectPlugin::allows('update', $record))
             ->visible(fn (Subaccount $record): bool => FilamentPaystackConnectPlugin::get()->getSellerModel() !== null && $record->getAttribute('owner_id') === null)

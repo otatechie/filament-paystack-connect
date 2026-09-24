@@ -40,6 +40,7 @@ class ConnectSellerAction
     {
         return static::base('connect')
             ->label('Add seller')
+            ->modalSubmitActionLabel('Add seller')
             ->icon(Heroicon::OutlinedPlus)
             ->authorize(fn (): bool => FilamentPaystackConnectPlugin::allows('create', Subaccount::class))
             ->schema(fn (): array => [
@@ -68,6 +69,8 @@ class ConnectSellerAction
     {
         return static::base('updateAccount')
             ->label('Edit')
+            ->modalHeading('Edit seller')
+            ->modalSubmitActionLabel('Save changes')
             ->icon(Heroicon::OutlinedPencilSquare)
             ->authorize(fn (Subaccount $record): bool => FilamentPaystackConnectPlugin::allows('update', $record))
             ->visible(fn (Subaccount $record): bool => static::plugin()->getSellerModel() !== null && $record->getAttribute('owner_id') !== null)

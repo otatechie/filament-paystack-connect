@@ -26,6 +26,8 @@ class RefundPaymentAction
             ->color('danger')
             ->visible(fn (Payment $record): bool => $record->isSuccessful() && ! $record->refundableAmount()->isZero())
             ->authorize(fn (Payment $record): bool => FilamentPaystackConnectPlugin::allows('refund', $record))
+            ->modalHeading('Refund payment')
+            ->modalSubmitActionLabel('Refund')
             ->modalDescription('Paystack returns the money to the customer. The payment updates when Paystack confirms the refund.')
             ->schema([
                 TextInput::make('amount')
